@@ -1,0 +1,48 @@
+<html>
+<head>
+    <title>Sales Department</title>
+    <style>
+        table {
+            width: 50%; /* Ширина таблицы */
+            border-collapse: collapse;
+            border: 1px solid gray;
+        }
+
+        td {
+            padding: 5px; /* Поля в ячейках */
+            vertical-align: top; /* Выравнивание по верхнему краю ячеек */
+            horiz-align: center;
+            text-align: center;
+        }
+
+        th{
+            border-collapse: collapse;
+            border: 1px solid gray;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Update Order</h1>
+<a href="/orderFilter?key=">Back</a>
+<form action="/orderUpdateSubmit" method="post">
+    <select name="select">
+        {{#clientSel}}
+        <option value="{{id}}" >{{name}}</option>
+        {{/clientSel}}
+        {{#sel}}
+        <option value="{{ClientFullId}}" selected >{{ClientFullName}}</option>
+    </select>
+    <br><br>
+    <label for="Date_id">Date: </label>
+    <input id="Date_id" type="date" name="date" value="{{date}}">
+    <br><br>
+    <label for="Price_id">Price: </label>
+    <input id="Price_id" type="number" step="0.01" name="price" value="{{price}}">
+
+    <button type="submit" name="link" value="{{id}}">Submit</button>
+    {{/sel}}
+</form>
+
+</body>
+</html>

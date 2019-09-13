@@ -2,7 +2,7 @@
 <head>
     <title>Sales Department</title>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="/css/style.css"/>
     <style>
         table {
             width: 100%; /* Ширина таблицы */
@@ -17,33 +17,47 @@
             text-align: center;
         }
 
-        th{
+        th {
             border-collapse: collapse;
             border: 1px solid gray;
         }
     </style>
 </head>
 <body>
-<div>
-    Add new client:
-</div>
-<form method="post" >
-    <input type="text" name="name" placeholder="FullName/Company"/>
-    <input type="text" name="number" placeholder="Phone Number"/>
-    <button type="submit">Add</button>
-</form>
-<div>
-    Add new Order:
-</div>
-<form method="post" action="/add">
-    <select name="select">
-        {{#clientSel}}
-        <option value="{{id}}">{{name}}</option>
-        {{/clientSel}}
-    </select>
-    <input type="number" step="0.01" name="cost" placeholder="Price"/>
-    <button type="submit">Add</button>
-</form>
+<table>
+    <tr>
+        <td style="horiz-align: left">
+            <div>
+                Add new client:
+            </div>
+            <form method="post">
+                <input type="text" name="name" placeholder="FullName/Company"/>
+                <input type="text" name="number" placeholder="Phone Number"/>
+                <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+                <button type="submit">Add</button>
+            </form>
+            <div>
+                Add new Order:
+            </div>
+            <form method="post" action="/add">
+                <select name="select">
+                    {{#clientSel}}
+                        <option value="{{id}}">{{name}}</option>
+                    {{/clientSel}}
+                </select>
+                <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+                <input type="number" step="0.01" name="cost" placeholder="Price"/>
+                <button type="submit">Add</button>
+            </form>
+        </td>
+        <td style="horiz-align: right; vertical-align: top">
+            <form action="/logout" method="post">
+                <input type="submit" value="Sign Out"/>
+                <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+            </form>
+        </td>
+    </tr>
+</table>
 <table>
     <tr>
         <td style="horiz-align: right">
@@ -74,11 +88,11 @@
                     </th>
                 </tr>
                 {{#clients}}
-                <tr>
-                    <td>{{id}}</td>
-                    <td>{{name}}</td>
-                    <td>{{number}}</td>
-                </tr>
+                    <tr>
+                        <td>{{id}}</td>
+                        <td>{{name}}</td>
+                        <td>{{number}}</td>
+                    </tr>
                 {{/clients}}
             </table>
         </th>
@@ -102,12 +116,12 @@
                     </th>
                 </tr>
                 {{#orders}}
-                <tr>
-                    <td>{{id}}</td>
-                    <td>{{ClientFullName}}</td>
-                    <td>{{date}}</td>
-                    <td>{{price}}</td>
-                </tr>
+                    <tr>
+                        <td>{{id}}</td>
+                        <td>{{ClientFullName}}</td>
+                        <td>{{date}}</td>
+                        <td>{{price}}</td>
+                    </tr>
                 {{/orders}}
             </table>
         </th>

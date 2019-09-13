@@ -21,6 +21,10 @@ public class OrderController {
     @Autowired
     private OrderRepos orderRepos;
 
+    @GetMapping("/")
+    public String welcome(){
+        return "welcome";
+    }
     @GetMapping("/main")
     public String main(Map<String, Object> model) {
         Iterable<Client> clients = clientRepos.findAll();

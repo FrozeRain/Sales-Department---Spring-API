@@ -27,6 +27,7 @@
 <a href="/main">Back</a>
 <form action="/orderFilter" method="get">
     <input type="text" name="key" placeholder="Search"/>
+    <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
     <button type="submit">Search</button>
 </form>
 <table>
@@ -59,12 +60,14 @@
                 <button style="background-color: cornflowerblue; border: cadetblue" type="submit" name="update"
                         value="{{id}}">Edit
                 </button>
+                <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
             </form>
         </td>
         <td>
             <form method="post" action="/orderDelete">
                 <button style="background-color: red; border: brown" type="submit" name="delete" value="{{id}}">X
                 </button>
+                <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
             </form>
         </td>
     </tr>

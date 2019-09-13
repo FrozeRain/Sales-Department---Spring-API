@@ -27,6 +27,7 @@
 <a href="/main">Back</a>
 <form action="/clientFilter" method="get">
     <input type="text" name="key" placeholder="Search"/>
+    <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
     <button type="submit">Search</button>
 </form>
 <table>
@@ -51,6 +52,7 @@
         <td>{{number}}</td>
         <td>
             <form>
+                <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
                 <button style="background-color: cornflowerblue; border: cadetblue" type="submit" name="update" value="{{id}}">Edit</button>
             </form>
         </td>

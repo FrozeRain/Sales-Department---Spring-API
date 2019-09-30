@@ -5,7 +5,7 @@
         <title>SalesDep CMS</title>
         <style type="text/css">
             table {
-                width: 500px;
+                width: min-content;
                 border-collapse: collapse;
                 border: 1px solid gray;
                 border-spacing: 20px;
@@ -13,7 +13,6 @@
             }
 
             td {
-                width: 50%;
                 padding: 20px;
             }
         </style>
@@ -27,36 +26,30 @@
     </head>
     <body>
     <div class="container">
-        <h2 style="text-align: center">${tittle}</h2>
-        <form action="${path}" method="post">
-            <table>
-                <tr>
-                    <td style="text-align: right">
-                        User Name:
-                    </td>
-                    <td>
-                        <label><input type="text" name="username"/> </label>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="text-align: right">
-                        Password:
-                    </td>
-                    <td>
-                        <label><input type="password" name="password"/> </label>
-                        <input type="hidden" name="_csrf" value="${_csrf.token}"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="text-align: right">
-                        <a href="${link}">${linkT}</a>
-                    </td>
-                    <td>
-                        <input type="submit" value="${bName}"/>
-                    </td>
-                </tr>
-            </table>
-        </form>
+        <br>
+        <fieldset style="width: auto">
+            <legend>
+                <h2>${tittle}</h2>
+            </legend>
+            <br>
+            <form action="${path}" method="post">
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label" for="usr">User Name:</label>
+                    <div class="col-sm-3">
+                        <input type="text" name="username" class="form-control" placeholder="username" id="usr"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label" for="psw">Password:</label>
+                    <div class="col-sm-3">
+                        <input type="password" name="password" class="form-control" placeholder="password" id="psw"/>
+                    </div>
+                </div>
+                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+                <a href="${link}">${linkT}</a>
+                <button class="btn btn-primary" type="submit">${bName}</button>
+            </form>
+        </fieldset>
         <#nested>
     </div>
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

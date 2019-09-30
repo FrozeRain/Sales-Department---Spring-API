@@ -69,4 +69,14 @@ public class Order {
     public void setPrice(float price) {
         this.price = price;
     }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", client=" + client +
+                ", date=" + date +
+                ", price=" + price +
+                '}';
+    }
 }

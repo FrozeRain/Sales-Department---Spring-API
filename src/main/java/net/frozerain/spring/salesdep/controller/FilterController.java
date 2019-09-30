@@ -6,17 +6,15 @@ import net.frozerain.spring.salesdep.repository.ClientRepos;
 import net.frozerain.spring.salesdep.repository.OrderRepos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.util.Date;
-import java.util.Map;
 
 @Controller
+@RequestMapping("/edit")
 public class FilterController {
     @Autowired
     ClientRepos clientRepos;
@@ -24,62 +22,80 @@ public class FilterController {
     @Autowired
     OrderRepos orderRepos;
 
-    @GetMapping("/clientFilter")
-    public String clientFilter(@RequestParam String key, Map<String, Object> model){
-        Iterable<Client> clients;
-        if (!key.isEmpty()) {
-            clients = clientRepos.findAllByNameContaining(key);
+    @GetMapping("/{eType}")
+    public String filter(@PathVariable(required = true) String eType,
+                         @RequestParam(required = false, defaultValue = "") String filter,
+                         Model model) {
+        if (eType.equals("order")) {
+            Iterable<Order> orders = (filter.isEmpty() ? orderRepos.findAll() : orderRepos.findAllByClientNameContaining(filter));
+
+            model.addAttribute("isOrder", Boolean.TRUE);
+            model.addAttribute("orders", orders);
+
         } else {
-            clients = clientRepos.findAll();
+            Iterable<Client> clients = (filter.isEmpty() ? clientRepos.findAll() : clientRepos.findAllByNameContaining(filter));
+
+            model.addAttribute("isOrder", Boolean.FALSE);
+            model.addAttribute("clients", clients);
+
         }
 
-        model.put("clients", clients);
-        return "clientFilter";
+        model.addAttribute("filter", filter);
+        return "edit";
     }
 
-    @GetMapping("/orderFilter")
-    public String orderFilter(@RequestParam String key, Map<String, Object> model){
-        Iterable<Order> orders;
-        if (!key.isEmpty()){
-            orders = orderRepos.findAllByClientNameContaining(key);
-        } else {
-            orders = orderRepos.findAll();
+    @GetMapping("/order/delete")
+    public String delete(@RequestParam(required = true) int id, Model model) {
+        Order order = orderRepos.findById(id);
+        if (order != null) {
+            orderRepos.delete(order);
         }
-
-        model.put("orders", orders);
-        return "orderFilter";
+        return "redirect:/edit/order";
     }
 
-    @PostMapping("/orderDelete")
-    public String deleteOrder(@RequestParam(name = "delete") int id) {
-        Order order = orderRepos.findById(id);
-        orderRepos.delete(order);
+    @GetMapping("/{eType}/update")
+    public String update(@PathVariable String eType,
+                         @RequestParam int id,
+                         Model model) {
+        if (eType.equals("order")) {
+            Order order = orderRepos.findById(id);
+            Client client = order.getClient();
+            Iterable<Client> iterable = clientRepos.findAllByIdIsNot(client.getId());
 
-        return "redirect:/orderFilter?key=";
+            model.addAttribute("clientSel", iterable);
+            model.addAttribute("sel", order);
+            model.addAttribute("isOrder", Boolean.TRUE);
+        } else {
+            Client client = clientRepos.findById(id);
+
+            model.addAttribute("client", client);
+            model.addAttribute("isOrder", Boolean.FALSE);
+        }
+        return "update";
     }
 
-    @PostMapping("/orderUpdate")
-    public String updateOrder(@RequestParam(name = "update") int id, Map<String, Object> model){
-        Order order = orderRepos.findById(id);
-        Client client = order.getClient();
-        Iterable<Client> iterable = clientRepos.findAllByIdIsNot(client.getId());
-        model.put("clientSel", iterable);
-        model.put("sel", order);
-        return "orderUpdate";
-    }
+    @PostMapping("/{eType}/updateSubmit")
+    public String updateOrderSubmit(@PathVariable String eType,
+                                    @RequestParam(required = true) int selId,
+                                    @RequestParam(required = false) String name,
+                                    @RequestParam String date,
+                                    @RequestParam(required = false, defaultValue = "0.00") float price,
+                                    @RequestParam(required = false, defaultValue = "0") int linkId) throws ParseException {
+        if (eType.equals("order")) {
+            Order order = orderRepos.findById(linkId);
+            Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+            order.setDate(date1);
+            order.setPrice(price);
+            order.setClient(clientRepos.findById(selId));
 
-    @PostMapping("/orderUpdateSubmit")
-    public String updateOrderSubmit(@RequestParam(name = "select") int id,
-                                    @RequestParam(name = "date") String date,
-                                    @RequestParam(name = "price") float price,
-                                    @RequestParam(name = "link") int link_id) throws ParseException {
-        Order order = orderRepos.findById(link_id);
-        Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse(date);
-        order.setDate(date1);
-        order.setPrice(price);
-        order.setClient(clientRepos.findById(id));
+            orderRepos.saveAndFlush(order);
+        } else {
+            Client client = clientRepos.findById(selId);
+            client.setName(name);
+            client.setNumber(date);
 
-        orderRepos.saveAndFlush(order);
-        return "redirect:/orderFilter?key=";
+            clientRepos.saveAndFlush(client);
+        }
+        return "redirect:/edit/" + eType;
     }
 }

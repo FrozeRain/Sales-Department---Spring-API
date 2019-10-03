@@ -35,6 +35,7 @@ public class UserController {
     public String editSubmit(@RequestParam String username,
                              @RequestParam Map<String, String> form,
                              @RequestParam("user") User user) {
+
         userService.saveUser(user, username, form);
         return "redirect:/panel";
     }

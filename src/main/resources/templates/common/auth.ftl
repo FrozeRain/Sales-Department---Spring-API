@@ -1,4 +1,4 @@
-<#macro auth path, tittle, link, linkT, bName>
+<#macro auth path, tittle, link, linkT, bName, isRegister>
     <!DOCTYPE html>
     <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
@@ -36,7 +36,7 @@
                 <label class="col-sm-2 col-form-label" for="usr">User Name:</label>
                 <div class="col-sm-3">
                     <input type="text" name="username"
-                           class="form-control ${(usernameError??)?string('is-invalid', '')}" placeholder="username"
+                           class="form-control ${(usernameError??)?string('is-invalid', '')}" placeholder="Username"
                            id="usr" value="<#if user??>${user.username}</#if>"/>
                     <#if usernameError??>
                         <div class="invalid-feedback">
@@ -49,7 +49,7 @@
                 <label class="col-sm-2 col-form-label" for="psw">Password:</label>
                 <div class="col-sm-3">
                     <input type="password" name="password"
-                           class="form-control ${(passwordError??)?string('is-invalid', '')}" placeholder="password"
+                           class="form-control ${(passwordError??)?string('is-invalid', '')}" placeholder="Password"
                            id="psw"/>
                     <#if passwordError??>
                         <div class="invalid-feedback">
@@ -58,12 +58,28 @@
                     </#if>
                 </div>
             </div>
+            <#if isRegister>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label" for="psw">Confirm password:</label>
+                    <div class="col-sm-3">
+                        <input type="password" name="password2"
+                               class="form-control ${(password2Error??)?string('is-invalid', '')}" placeholder="Retype password"
+                               id="psw"/>
+                        <#if password2Error??>
+                            <div class="invalid-feedback">
+                                ${password2Error}
+                            </div>
+                        </#if>
+                    </div>
+                </div>
+            </#if>
             <div class="form-group row">
                 <#nested>
             </div>
             <input type="hidden" name="_csrf" value="${_csrf.token}"/>
-            <a href="${link}">${linkT}</a>
-            <button class="btn btn-primary" type="submit">${bName}</button>
+            <a class="btn btn-danger" href="/">Cancel</a>
+            <a class="btn btn-outline-primary ml-3" href="${link}">${linkT}</a>
+            <button class="btn btn-primary ml-3" type="submit">${bName}</button>
         </form>
     </div>
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

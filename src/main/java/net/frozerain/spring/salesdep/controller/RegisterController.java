@@ -26,6 +26,9 @@ public class RegisterController {
     public String addUser(@Valid User user,
                           BindingResult bindingResult,
                           Model model) {
+        if (user.getPassword() != null && !user.getPassword().equals(user.getPassword2())){
+            model.addAttribute("password2Error", "Password are different");
+        }
         if (bindingResult.hasErrors()){
             Map<String, String> errorMap = ControllerUtils.getErrors(bindingResult);
             model.mergeAttributes(errorMap);

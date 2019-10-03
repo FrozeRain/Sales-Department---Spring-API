@@ -27,6 +27,7 @@ public class UserService implements UserDetailsService {
         User user = userRepos.findByUsername(username);
 
         if (user == null){
+            System.out.println("EXCEPTION THROWED");
             throw new UsernameNotFoundException("User not found!");
         }
         return user;
@@ -51,6 +52,7 @@ public class UserService implements UserDetailsService {
 
     public void saveUser(User user, String username, Map<String, String> form) {
         user.setUsername(username);
+        user.setPassword2("confirm");
         Set<String> roles = Arrays.stream(Role.values())
                 .map(Role::getAuthority)
                 .collect(Collectors.toSet());

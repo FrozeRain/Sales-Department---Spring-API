@@ -6,17 +6,29 @@
             <h4>
                 Add new Client
             </h4>
-            <form method="post">
+            <form action="/main" method="post">
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="inputName">Full Name/Company</label>
-                        <input class="form-control" type="text" name="name" placeholder="Full Name/Company"
-                               id="inputName"/>
+                        <input class="form-control ${(nameError??)?string('is-invalid', '')}" type="text" name="name"
+                               placeholder="Full Name/Company"
+                               id="inputName" value="<#if client??>${client.name}</#if>"/>
+                        <#if nameError??>
+                            <div class="invalid-feedback">
+                                ${nameError}
+                            </div>
+                        </#if>
                     </div>
                     <div class="form-group col-md-4">
                         <label for="inputPhone">Phone Number</label>
-                        <input class="form-control" type="text" name="number" placeholder="Phone Number"
-                               id="inputPhone"/>
+                        <input class="form-control ${(numberError??)?string('is-invalid', '')}" type="text"
+                               name="number" placeholder="Phone Number"
+                               id="inputPhone" value="<#if client??>${client.number}</#if>"/>
+                        <#if numberError??>
+                            <div class="invalid-feedback">
+                                ${numberError}
+                            </div>
+                        </#if>
                         <input type="hidden" name="_csrf" value="${_csrf.token}"/>
                     </div>
                 </div>
@@ -29,7 +41,7 @@
             <h4>
                 Add new Order
             </h4>
-            <form method="post" action="/add">
+            <form method="post" action="/add/order">
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="selectName">Name/Company</label>
@@ -56,14 +68,14 @@
     <div class="row">
         <div class="col">
             <div class="form-row">
-                <form action="/edit/client" method="get">
-                    <button class="btn btn-primary mb-2" type="submit">Edit</button>
+                <form class="form-inline" action="/edit/client" method="get">
+                    <button class="btn btn-primary mr-2 mb-2" type="submit">Edit</button>
+                    <label>
+                        <h5>
+                            Clients list
+                        </h5>
+                    </label>
                 </form>
-                <div class="ml-3">
-                    <h5>
-                        Client list
-                    </h5>
-                </div>
             </div>
             <table class="table">
                 <thead class="thead-dark">
@@ -92,14 +104,14 @@
         </div>
         <div class="col">
             <div class="form-row">
-                <form action="/edit/order" method="get">
-                    <button class="btn btn-primary mb-2" type="submit">Edit</button>
+                <form class="form-inline" action="/edit/order" method="get">
+                    <button class="btn btn-primary mr-2 mb-2" type="submit">Edit</button>
+                    <label>
+                        <h5>
+                            Orders list
+                        </h5>
+                    </label>
                 </form>
-                <div class="ml-3">
-                    <h5>
-                        Order list
-                    </h5>
-                </div>
             </div>
             <table class="table">
                 <thead class="thead-dark">

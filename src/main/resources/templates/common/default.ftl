@@ -34,7 +34,7 @@
     </head>
     <body>
     <#include "navbar.ftl">
-    <div class="container mx-auto">
+    <div class="container mx-auto mt-3">
         <#nested>
     </div>
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

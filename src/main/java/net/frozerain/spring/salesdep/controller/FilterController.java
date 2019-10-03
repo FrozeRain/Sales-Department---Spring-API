@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/edit")
@@ -45,8 +46,7 @@ public class FilterController {
     }
 
     @GetMapping("/order/delete")
-    public String delete(@RequestParam(required = true) int id, Model model) {
-        Order order = orderRepos.findById(id);
+    public String delete(@RequestParam(required = true, name = "id") Order order, Model model) {
         if (order != null) {
             orderRepos.delete(order);
         }
@@ -55,18 +55,23 @@ public class FilterController {
 
     @GetMapping("/{eType}/update")
     public String update(@PathVariable String eType,
-                         @RequestParam int id,
+                         @RequestParam Long id,
                          Model model) {
+        Order order = null;
+        Iterable<Client> iterable = null;
+
         if (eType.equals("order")) {
-            Order order = orderRepos.findById(id);
-            Client client = order.getClient();
-            Iterable<Client> iterable = clientRepos.findAllByIdIsNot(client.getId());
+            Optional<Order> op = orderRepos.findById(id);
+            if (op.isPresent()){
+                order = op.get();
+                iterable = clientRepos.findAllByIdIsNot(order.getClient().getId());
+            }
 
             model.addAttribute("clientSel", iterable);
             model.addAttribute("sel", order);
             model.addAttribute("isOrder", Boolean.TRUE);
         } else {
-            Client client = clientRepos.findById(id);
+            Client client = clientRepos.findById(id).get();
 
             model.addAttribute("client", client);
             model.addAttribute("isOrder", Boolean.FALSE);
@@ -76,21 +81,21 @@ public class FilterController {
 
     @PostMapping("/{eType}/updateSubmit")
     public String updateOrderSubmit(@PathVariable String eType,
-                                    @RequestParam(required = true) int selId,
+                                    @RequestParam(required = true) Long selId,
                                     @RequestParam(required = false) String name,
                                     @RequestParam String date,
-                                    @RequestParam(required = false, defaultValue = "0.00") float price,
-                                    @RequestParam(required = false, defaultValue = "0") int linkId) throws ParseException {
+                                    @RequestParam(required = false, defaultValue = "0.00") double price,
+                                    @RequestParam(required = false, defaultValue = "0") Long linkId) throws ParseException {
         if (eType.equals("order")) {
-            Order order = orderRepos.findById(linkId);
+            Order order = orderRepos.findById(linkId).get();
             Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse(date);
             order.setDate(date1);
             order.setPrice(price);
-            order.setClient(clientRepos.findById(selId));
+            order.setClient(clientRepos.findById(selId).get());
 
             orderRepos.saveAndFlush(order);
         } else {
-            Client client = clientRepos.findById(selId);
+            Client client = clientRepos.findById(selId).get();
             client.setName(name);
             client.setNumber(date);
 

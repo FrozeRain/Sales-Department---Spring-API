@@ -1,15 +1,19 @@
 package net.frozerain.spring.salesdep.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "CLIENTS")
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Long id;
 
+    @NotBlank(message = "Name cannot be empty")
     private String name;
+
+    @NotBlank(message = "Number cannot be empty")
     private String number;
 
     public Client() {
@@ -20,11 +24,11 @@ public class Client {
         this.number = number;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

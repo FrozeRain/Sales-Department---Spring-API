@@ -7,11 +7,17 @@ import net.frozerain.spring.salesdep.repository.OrderRepos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.validation.Valid;
 import java.util.Date;
+import java.util.Map;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @Controller
 public class OrderController {
@@ -38,11 +44,17 @@ public class OrderController {
     }
 
     @PostMapping("/main")
-    public String addClient(@RequestParam(name = "name", required = true) String name,
-                            @RequestParam(name = "number") String number,
+    public String addClient(@Valid Client client,
+                            BindingResult bindingResult,
                             Model model) {
-        Client client = new Client(name, number);
-        clientRepos.saveAndFlush(client);
+        if (bindingResult.hasErrors()){
+            Map<String, String> errorMap = ControllerUtils.getErrors(bindingResult);
+            model.mergeAttributes(errorMap);
+            model.addAttribute("client", client);
+        } else {
+            clientRepos.saveAndFlush(client);
+            model.addAttribute("client", null);
+        }
 
         Iterable<Client> clients = clientRepos.findAll();
         Iterable<Order> orders = orderRepos.findAll();
@@ -53,13 +65,16 @@ public class OrderController {
         return "main";
     }
 
-    @PostMapping("/add")
-    public String addOrder(@RequestParam(name = "select", required = true) int id,
-                           @RequestParam(name = "cost", required = true) float price,
+    @PostMapping("/add/order")
+    public String addOrder(@RequestParam(name = "select") Client client,
+                           @RequestParam(name = "cost") String price,
                            Model model) {
-        Client client1 = clientRepos.findById(id);
+        double orderPrice = 0.0;
+        if (!price.isEmpty()){
+            orderPrice = Double.parseDouble(price);
+        }
         Date date = new Date();
-        Order order = new Order(client1, date, price);
+        Order order = new Order(client, date, orderPrice);
         orderRepos.saveAndFlush(order);
 
         Iterable<Client> clients = clientRepos.findAll();

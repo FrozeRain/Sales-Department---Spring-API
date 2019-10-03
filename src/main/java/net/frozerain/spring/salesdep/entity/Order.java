@@ -1,6 +1,7 @@
 package net.frozerain.spring.salesdep.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 @Entity
@@ -8,7 +9,7 @@ import java.util.Date;
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Long id;
 
     @ManyToOne(targetEntity = net.frozerain.spring.salesdep.entity.Client.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "CLIENT")
@@ -17,14 +18,14 @@ public class Order {
     @Temporal(TemporalType.DATE)
     @Column(name = "DATE")
     private Date date;
-
+    
     @Column(name = "VALUE")
-    private float price;
+    private double price;
 
     public Order() {
     }
 
-    public Order(Client client, Date date, float price) {
+    public Order(Client client, Date date, double price) {
         this.client = client;
         this.date = date;
         this.price = price;
@@ -34,15 +35,15 @@ public class Order {
         return this.client.getName();
     }
 
-    public int getClientFullId(){
+    public Long getClientFullId(){
         return this.client.getId();
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -62,11 +63,11 @@ public class Order {
         this.date = date;
     }
 
-    public float getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 

@@ -2,8 +2,11 @@
 
 <@def.page; x>
     <div style="text-align: center">
-        Hello, User<br>
-        <a href="/main">Login</a>
+        <h3>
+            Hello, User
+        </h3>
+        <br>
+        <a href="/main">Login / Register</a>
     </div>
 </@def.page>
 

@@ -1,91 +1,63 @@
 <#macro updateOrder cS sel>
-    <form action="/edit/order" method="get">
-        <button type="submit">Back</button>
-    </form>
+    <div class="row mt-3">
+        <a href="/edit/order">Back</a>
+    </div>
     <br>
-    <fieldset style="width: min-content">
-        <legend>
-            Update Order:
-        </legend>
-        <form action="/edit/order/updateSubmit" method="post">
-            <table style="width: min-content">
-                <tr>
-                    <td style="text-align: right">
-                        <input type="hidden" name="_csrf" value="${_csrf.token}"/>
-                        Name/Company
-                    </td>
-                    <td style="text-align: left">
-                        <select name="selId">
-                            <#list cS as cS>
-                                <option value="${cS.id}">${cS.name}</option>
-                            </#list>
-                            <option value="${sel.clientFullId}" selected>${sel.clientFullName}</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="text-align: right">
-                        Date:
-                    </td>
-                    <td style="text-align: left">
-                        <input type="date" name="date" value="${sel.date}">
-                    </td>
-                </tr>
-                <tr>
-                    <td style="text-align: right">
-                        Price:
-                    </td>
-                    <td>
-                        <input type="number" step="0.01" name="price"
-                               value="${sel.price?string["#########.00"]?replace(",", ".")}">
-                    </td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>
-                        <button type="submit" name="linkId" value="${sel.id}">Save</button>
-                    </td>
-                </tr>
-            </table>
-        </form>
-    </fieldset>
+    <h4>
+        Update Order:
+    </h4>
+    <form action="/edit/order/updateSubmit" method="post">
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label for="selectName">Name/Company</label>
+                <select id="selectName" name="selId" class="form-control">
+                    <#if cS??>
+                        <#list cS as cS>
+                            <option value="${cS.id}">${cS.name}</option>
+                        </#list>
+                    </#if>
+                    <option value="${sel.clientFullId}" selected>${sel.clientFullName}</option>
+                </select>
+                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+            </div>
+            <div class="form-group col-md-3">
+                <label for="inputDate">Date:</label>
+                <input id="inputDate" type="date" name="date" value="${sel.date}" class="form-control">
+            </div>
+            <div class="form-group col-md-3">
+                <label for="inputPrice">Price:</label>
+                <input class="form-control" id="inputPrice" type="number" step="0.01" name="price"
+                       value="${sel.price?string["#########.00"]?replace(",", ".")}">
+            </div>
+        </div>
+        <div class="form-row">
+            <button class="btn btn-primary" type="submit" name="linkId" value="${sel.id}">Save</button>
+        </div>
+    </form>
 </#macro>
 
 <#macro updateClient client>
-    <form action="/edit/client" method="get">
-        <button type="submit">Back</button>
-    </form>
+    <div class="row mt-3">
+        <a href="/edit/client">Back</a>
+    </div>
     <br>
-    <fieldset style="width: min-content">
-        <legend>
-            Update Client:
-        </legend>
-        <form action="/edit/client/updateSubmit" method="post">
-            <table style="width: min-content">
-                <tr>
-                    <td style="text-align: right">
-                        <input type="hidden" name="_csrf" value="${_csrf.token}"/>
-                        Name/Company
-                    </td>
-                    <td style="text-align: left">
-                        <input type="text" name="name" value="${client.name}">
-                    </td>
-                </tr>
-                <tr>
-                    <td style="text-align: right">
-                        Number:
-                    </td>
-                    <td style="text-align: left">
-                        <input type="text" name="date" value="${client.number}">
-                    </td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>
-                        <button type="submit" name="selId" value="${client.id}">Save</button>
-                    </td>
-                </tr>
-            </table>
-        </form>
-    </fieldset>
+    <h4>
+        Update Client:
+    </h4>
+    <form action="/edit/client/updateSubmit" method="post">
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label for="inputName">Name/Company</label>
+                <input class="form-control" id="inputName" type="text" name="name" value="${client.name}">
+                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+            </div>
+            <div class="form-group col-md-3">
+                <label for="inputNumber">Number:</label>
+                <input class="form-control" id="inputNumber" type="text" name="date" value="${client.number}">
+            </div>
+        </div>
+        <div class="form-row">
+            <button class="btn btn-primary" type="submit" name="selId" value="${client.id}">Save</button>
+        </div>
+    </form>
 </#macro>

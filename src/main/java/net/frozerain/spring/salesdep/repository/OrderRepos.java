@@ -8,9 +8,7 @@ import java.util.List;
 public interface OrderRepos extends JpaRepository<Order, Long> {
     void deleteById(int id);
 
-    Order findById(int id);
-
     List<Order> findAllByClientNameContaining(String clientName);
 
-    List<Order> findAllByIdIsNot(int id);
+    List<Order> findAllByIdIsNot(Long id);
 }

@@ -4,7 +4,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.util.Collection;
 import java.util.Set;
@@ -33,7 +32,7 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
-    public boolean isAdmin() {
+    public Boolean isAdmin() {
         return roles.contains(Role.ADMIN);
     }
 

@@ -3,7 +3,6 @@ package net.frozerain.spring.salesdep.service;
 import net.frozerain.spring.salesdep.entity.Role;
 import net.frozerain.spring.salesdep.entity.User;
 import net.frozerain.spring.salesdep.repository.UserRepos;
-import org.hibernate.mapping.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -27,7 +26,7 @@ public class UserService implements UserDetailsService {
         User user = userRepos.findByUsername(username);
 
         if (user == null){
-            System.out.println("EXCEPTION THROWED");
+            System.out.println("EXCEPTION");
             throw new UsernameNotFoundException("User not found!");
         }
         return user;

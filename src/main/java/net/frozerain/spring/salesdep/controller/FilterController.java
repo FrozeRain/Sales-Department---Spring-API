@@ -57,11 +57,11 @@ public class FilterController {
     public String update(@PathVariable String eType,
                          @RequestParam Long id,
                          Model model) {
-        Order order = null;
-        Iterable<Client> iterable = null;
 
         if (eType.equals("order")) {
             Optional<Order> op = orderRepos.findById(id);
+            Order order = null;
+            Iterable<Client> iterable = null;
             if (op.isPresent()){
                 order = op.get();
                 iterable = clientRepos.findAllByIdIsNot(order.getClient().getId());
